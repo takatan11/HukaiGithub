@@ -1,5 +1,5 @@
-import java.util.List;
 import java.awt.*;
+import java.util.List;
 
 public class EnemyTypeC extends Enemy {
     private int speedX = 2;
@@ -23,7 +23,6 @@ public class EnemyTypeC extends Enemy {
     public void draw(Graphics g) {
         g.setColor(Color.MAGENTA);
         g.fillRect(x, y, width, height);
-        // ボスHPバー
         g.setColor(Color.RED);
         g.fillRect(x, y - 10, hp * 10, 5);
     }

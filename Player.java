@@ -23,7 +23,7 @@ public class Player {
     public void shoot() {
         if(shootCooldown <= 0) {
             bullets.add(new Bullet(x + width/2 - 5, y));
-            shootCooldown = 15; // クールタイム
+            shootCooldown = 15;
         } else {
             shootCooldown--;
         }

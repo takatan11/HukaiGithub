@@ -1,10 +1,10 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import javax.swing.*;
 
 public class ShootingGame extends JPanel implements KeyListener {
 
@@ -40,9 +40,7 @@ public class ShootingGame extends JPanel implements KeyListener {
         enemyBullets.clear();
         enemies.clear();
 
-        player = new Player(275, 500, bullets); // 画面下部固定
-
-        // 初期敵
+        player = new Player(275, 500, bullets); 
         enemies.add(new EnemyTypeA(100, 50));
         enemies.add(new EnemyTypeB(300, 100));
 
@@ -55,7 +53,7 @@ public class ShootingGame extends JPanel implements KeyListener {
     private void startGameLoop() {
         new Thread(() -> {
             long lastTime = System.nanoTime();
-            double nsPerFrame = 1000000000.0 / 60.0; // 60FPS
+            double nsPerFrame = 1000000000.0 / 60.0;
 
             while(true) {
                 long now = System.nanoTime();
@@ -72,12 +70,10 @@ public class ShootingGame extends JPanel implements KeyListener {
     private void updateGame() {
         if(titleScreen || gameOver) return;
 
-        // プレイヤー操作
         if(leftPressed) player.move(-5);
         if(rightPressed) player.move(5);
         if(spacePressed) player.shoot();
 
-        // プレイヤー弾移動
         Iterator<Bullet> bulletIt = bullets.iterator();
         while(bulletIt.hasNext()) {
             Bullet b = bulletIt.next();
@@ -85,13 +81,11 @@ public class ShootingGame extends JPanel implements KeyListener {
             if(b.getY() < 0) bulletIt.remove();
         }
 
-        // 敵移動・弾・衝突判定
         Iterator<Enemy> enemyIt = enemies.iterator();
         while(enemyIt.hasNext()) {
             Enemy enemy = enemyIt.next();
             enemy.move();
 
-            // 敵弾発射
             if(enemy instanceof EnemyTypeA) {
                 if(Math.random() < 0.01)
                     enemyBullets.add(new EnemyBullet(
@@ -117,13 +111,11 @@ public class ShootingGame extends JPanel implements KeyListener {
                     ));
             }
 
-            // プレイヤーとの衝突
             if(player.getBounds().intersects(enemy.getBounds())) {
                 player.damage();
                 if(!player.isAlive()) { triggerGameOver(); return; }
             }
 
-            // 弾との衝突
             Iterator<Bullet> bulletIt2 = bullets.iterator();
             while(bulletIt2.hasNext()) {
                 Bullet b = bulletIt2.next();
@@ -139,7 +131,6 @@ public class ShootingGame extends JPanel implements KeyListener {
             }
         }
 
-        // 敵弾移動
         Iterator<EnemyBullet> ebIt = enemyBullets.iterator();
         while(ebIt.hasNext()) {
             EnemyBullet eb = ebIt.next();
@@ -152,13 +143,11 @@ public class ShootingGame extends JPanel implements KeyListener {
             }
         }
 
-        // ボス出現
         if(score >= nextBossScore) {
             enemies.add(new EnemyTypeC(260, 50));
             nextBossScore += 1000;
         }
 
-        // 敵自動生成
         spawnCounter++;
         if(spawnCounter >= spawnInterval) {
             spawnCounter = 0;
