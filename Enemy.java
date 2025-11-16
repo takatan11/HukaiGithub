@@ -1,27 +1,20 @@
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 
-public class Enemy {
-
-    private int x;
-    private int y;
-    private final int size = 40;
-    private int speed = 2;
+public abstract class Enemy {
+    protected int x, y;
+    protected int width = 40, height = 40;
+    protected int life = 1;
 
     public Enemy(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public void move() {
-        y += speed;
-    }
+    public abstract void move();
+    public abstract void draw(Graphics g);
 
-    public void draw(Graphics g) {
-        g.setColor(Color.RED);
-        g.fillRect(x, y, size, size);
-    }
+    public Rectangle getBounds() { return new Rectangle(x, y, width, height); }
 
-    public int getX() { return x; }
-    public int getY() { return y; }
+    public void damage() { life--; }
+    public boolean isAlive() { return life > 0; }
 }
