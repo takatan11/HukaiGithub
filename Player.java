@@ -3,8 +3,10 @@ import java.util.List;
 
 public class Player {
     private int x, y;
+    private int width = 50, height = 50;
+    private int hp = 5;
     private List<Bullet> bullets;
-    private long lastShotTime = 0;
+    private int shootCooldown = 0;
 
     public Player(int x, int y, List<Bullet> bullets) {
         this.x = x;
@@ -15,23 +17,27 @@ public class Player {
     public void move(int dx) {
         x += dx;
         if(x < 0) x = 0;
-        if(x > 560) x = 560;
+        if(x > 600 - width) x = 600 - width;
     }
 
     public void shoot() {
-        long now = System.currentTimeMillis();
-        if(now - lastShotTime > 300) { // 0.3秒ごと
-            bullets.add(new Bullet(x + 18, y));
-            lastShotTime = now;
+        if(shootCooldown <= 0) {
+            bullets.add(new Bullet(x + width/2 - 5, y));
+            shootCooldown = 15; // クールタイム
+        } else {
+            shootCooldown--;
         }
     }
 
-    public void draw(Graphics g) {
-        g.setColor(Color.GREEN);
-        g.fillRect(x, y, 40, 40);
-    }
+    public void damage() { hp--; }
+    public boolean isAlive() { return hp > 0; }
+    public Rectangle getBounds() { return new Rectangle(x, y, width, height); }
 
-    public Rectangle getBounds() {
-        return new Rectangle(x, y, 40, 40);
+    public void draw(Graphics g) {
+        g.setColor(Color.BLUE);
+        g.fillRect(x, y, width, height);
+        // HPバー
+        g.setColor(Color.RED);
+        g.fillRect(10, 40, hp * 20, 10);
     }
 }

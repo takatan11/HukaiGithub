@@ -1,31 +1,30 @@
+import java.util.List;
 import java.awt.*;
 
 public class EnemyTypeC extends Enemy {
-    private int dx = 3;
-    private boolean right = true;
+    private int speedX = 2;
 
-    public EnemyTypeC(int x, int y) {
-        super(x, y);
-        this.life = 10; // ボスはライフ10
-        this.width = 80;
-        this.height = 80;
-    }
+    public EnemyTypeC(int x, int y) { super(x, y); hp = 10; }
 
     @Override
     public void move() {
-        if(right) x += dx; else x -= dx;
-        if(x < 0) right = true;
-        if(x > 520) right = false;
+        x += speedX;
+        if(x < 0 || x > 600 - width) speedX *= -1;
+    }
+
+    @Override
+    public void moveBullets(List<EnemyBullet> enemyBullets) {
+        if(Math.random() < 0.02) {
+            enemyBullets.add(new EnemyBullet(x + width/2, y + height, 0, 5));
+        }
     }
 
     @Override
     public void draw(Graphics g) {
-        g.setColor(Color.ORANGE);
+        g.setColor(Color.MAGENTA);
         g.fillRect(x, y, width, height);
-        // ライフバー表示
-        g.setColor(Color.BLACK);
-        g.fillRect(x, y-10, width, 5);
-        g.setColor(Color.GREEN);
-        g.fillRect(x, y-10, (int)((width*(double)life/10)), 5);
+        // ボスHPバー
+        g.setColor(Color.RED);
+        g.fillRect(x, y - 10, hp * 10, 5);
     }
 }

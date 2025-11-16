@@ -1,20 +1,25 @@
 import java.awt.*;
+import java.util.List;
 
 public abstract class Enemy {
-    protected int x, y;
-    protected int width = 40, height = 40;
-    protected int life = 1;
+    protected int x, y, width = 50, height = 50, hp = 1;
+    protected int speedY = 1;
 
-    public Enemy(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
+    public Enemy(int x, int y) { this.x = x; this.y = y; }
 
-    public abstract void move();
-    public abstract void draw(Graphics g);
-
+    public void move() { y += speedY; }
     public Rectangle getBounds() { return new Rectangle(x, y, width, height); }
+    public void damage() { hp--; }
+    public boolean isAlive() { return hp > 0; }
+    public int getX() { return x; }
+    public int getY() { return y; }
+    public int getWidth() { return width; }
+    public int getHeight() { return height; }
 
-    public void damage() { life--; }
-    public boolean isAlive() { return life > 0; }
+    public abstract void moveBullets(List<EnemyBullet> enemyBullets);
+
+    public void draw(Graphics g) {
+        g.setColor(Color.RED);
+        g.fillRect(x, y, width, height);
+    }
 }

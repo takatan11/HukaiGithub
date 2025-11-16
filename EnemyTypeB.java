@@ -1,27 +1,20 @@
+import java.util.List;
 import java.awt.*;
 
 public class EnemyTypeB extends Enemy {
-    private int dy = 1;
-    private int dx = 2;
-    private boolean right = true;
-
-    public EnemyTypeB(int x, int y) {
-        super(x, y);
-        this.life = 2; // ライフ2
-    }
+    public EnemyTypeB(int x, int y) { super(x, y); hp = 2; }
 
     @Override
-    public void move() {
-        y += dy;
-        if(right) x += dx; else x -= dx;
-        if(x < 0) right = true;
-        if(x > 560) right = false;
-        if(y > 450) y = 0;
+    public void moveBullets(List<EnemyBullet> enemyBullets) {
+        if(Math.random() < 0.01) {
+            int dx = (int)(Math.random() * 3 - 1); // -1,0,1
+            enemyBullets.add(new EnemyBullet(x + width/2, y + height, dx, 4));
+        }
     }
 
     @Override
     public void draw(Graphics g) {
-        g.setColor(Color.MAGENTA);
+        g.setColor(Color.ORANGE);
         g.fillRect(x, y, width, height);
     }
 }
